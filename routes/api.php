@@ -27,7 +27,7 @@ Route::group([
     ], function () {
         Route::post('/save', 'RoomsController@save');
         Route::get('/get-busy-room-numbers', 'RoomsController@getBusyRoomNumbers');
-        Route::get('/get-one/{id}', 'RoomsController@save');
+        Route::get('/get-one/{id}', 'RoomsController@getOne');
         Route::post('/get-list', 'RoomsController@getList');
         Route::get('/remove/{id}', 'RoomsController@remove');
     });
@@ -37,14 +37,9 @@ Route::group([
         'prefix' => 'guests',
     ], function() {
         Route::post('/save', 'GuestsController@save');
+        Route::post('/get-list', 'GuestsController@getList');
+        Route::get('/get-one/{id}', 'GuestsController@getOne');
+        Route::get('/remove/{id}', 'GuestsController@remove');
     });
 
 });
-
-
-
-
-
-
-
-

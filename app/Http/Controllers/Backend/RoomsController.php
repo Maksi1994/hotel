@@ -39,12 +39,12 @@ class RoomsController extends Controller
 
     public function getList(Request $request)
     {
-        $rooms = Room::getList()->paginate(20, '*', '*', $request->page ?? 1);
+        $rooms = Room::getList($request)->paginate(20, '*', '*', $request->page ?? 1);
     }
 
     public function getOne(Request $request)
     {
-        $room = Room::find($request->id);
+        $room = Room::with(['images', 'currentGuest'])->find($request->id);
 
         return new RoomResource($room);
     }

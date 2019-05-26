@@ -52,20 +52,13 @@ class Room extends Model
 
     }
 
-    /*
-    public function renters()
+    public function currentGuest()
     {
-        return $this->hasManyThrough(User::class, Guest::class, 'user_id', 'room_id', 'users');
+      return $this->hasMany(Guest::class)->with('users')->orderBy('created_at', 'desc')->first();
     }
-
-    public function currentRenter()
-    {
-        return $this->belongsToMany(User::class, 'user_guest', 'user_id', 'room_id');
-    }
-    */
 
     public function guests() {
-        return $this->hasMany(Guest::class);
+        return $this->hasMany(Guest::class)->with('users');
     }
 
     public static function boot()
