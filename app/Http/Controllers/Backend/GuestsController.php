@@ -40,7 +40,7 @@ class GuestsController extends Controller
 
     public function getList(Request $request)
     {
-      $guest = Guest::getList($request)->paginate(20, null, null, $request->page);
+      $guest = Guest::getList($request)->paginate(20, null, null, $request->page ?? 1);
 
       return new GuestCollection($guest);
     }

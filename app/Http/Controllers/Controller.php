@@ -13,6 +13,6 @@ class Controller extends BaseController
 
     public function success($success)
     {
-        return response()->json($success);
+        return response()->json(compact('success'));
     }
 }

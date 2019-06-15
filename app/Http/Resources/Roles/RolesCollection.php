@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Backend\Guests;
+namespace App\Http\Resources\Roles;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class GuestCollection extends ResourceCollection
+class RolesCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

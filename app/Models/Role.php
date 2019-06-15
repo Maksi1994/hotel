@@ -13,4 +13,8 @@ class Role extends Model
     public function users() {
         return $this->hasMany(User::class);
     }
+
+    public static function getRegularUserId() {
+        return self::where('name', 'regular')->get()->pluck('id')->first();
+    }
 }

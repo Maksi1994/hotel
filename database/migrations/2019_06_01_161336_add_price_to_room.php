@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddAtttsForGuests extends Migration
+class AddPriceToRoom extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddAtttsForGuests extends Migration
      */
     public function up()
     {
-        Schema::table('guests', function (Blueprint $table) {
-            $table->dateTime('start');
-            $table->dateTime('end');
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->float('price', 7, 2)->default(0);
         });
     }
 
@@ -26,8 +25,8 @@ class AddAtttsForGuests extends Migration
      */
     public function down()
     {
-        Schema::table('guests', function (Blueprint $table) {
-            $table->dropColumn(['start', 'end']);
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->dropColumn('price');
         });
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Backend\Guests;
+namespace App\Http\Resources\Roles;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GuestResource extends JsonResource
+class RoleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
