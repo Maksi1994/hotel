@@ -65,4 +65,13 @@ Route::group([
         Route::get('/delete/{id}', 'UsersController@deleteUser');
     });
 
+    Route::group([
+        'prefix' => 'services',
+    ], function() {
+        Route::post('/save', 'ServicesController@save');
+        Route::get('/get-one/{id}', 'ServicesController@getOne');
+        Route::post('/get-list', 'ServicesController@getList');
+        Route::get('/delete/{id}', 'ServicesController@delete');
+    });
+
 });

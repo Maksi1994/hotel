@@ -16,7 +16,6 @@ class UsersController extends Controller
     public function regist(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'role_id' => 'required|exists:roles,id',
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users',

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Controllers\Traits\ImageTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class Room extends Model
 {
@@ -49,32 +50,20 @@ class Room extends Model
 
     public function scopeGetList($query, Request $request)
     {
-        return $query->selectRaw('
-              rooms.id,
-              rooms.floor,
-              rooms.count_rooms,
-              rooms.price,
-              COUNT(guests.id) as popular,
-              COUNT(users.id) as users
-            ')
-            ->join('guests', 'rooms.id', '=', 'guests.room_id')
-            ->join('guest_user', 'guests.id', '=', 'guest_user.visit_id')
-            ->join('users', 'guest_user.user_id', '=', 'users.id')
-            ->groupBy('rooms.id')
-            ->orderBy($request->order_type, $request->order);
+
     }
 
-    public function currentUsers()
+    public function currentGuest()
     {
-        return $this->hasMany(Guest::class)
-            ->with('users')
-            ->whereRaw('UNIX_TIMESTAMP(guests.end) > ?', time())
-            ->orderBy('end', 'desc');
+      return $this->hasMany(Guest::class)
+      ->with('users')
+      ->orderBy('created_at', 'desc')
+      ->where('end', Carbon)
+      ->first();
     }
 
-    public function guests()
-    {
-        return $this->hasMany(Guest::class);
+    public function guests() {
+        return $this->hasMany(Guest::class)->with('users');
     }
 
     public static function boot()

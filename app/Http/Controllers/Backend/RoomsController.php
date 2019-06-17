@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Backend\Room\RoomsCollection;
 use App\Http\Resources\Backend\Rooms\RoomResource;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -15,7 +14,7 @@ class RoomsController extends Controller
     public function save(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'exists:rooms',
+            'id'=> 'exists:rooms',
             'number' => 'required|numeric',
             'floor' => 'required|numeric',
             'count_rooms' => 'required|numeric',
@@ -24,7 +23,7 @@ class RoomsController extends Controller
         ]);
         $success = false;
 
-        if (!$validator->fails()) {
+        if (!$validator->fails() ) {
             Room::saveOne($request);
             $success = true;
         }
@@ -32,8 +31,7 @@ class RoomsController extends Controller
         return $this->success($success);
     }
 
-    public function getBusyRoomNumbers(Request $request)
-    {
+    public function getBusyRoomNumbers(Request $request) {
         $numbers = Room::all()->pluck('number');
 
         return response()->json($numbers);
@@ -41,11 +39,7 @@ class RoomsController extends Controller
 
     public function getList(Request $request)
     {
-        $rooms = Room::getList($request)
-            ->with(['images', 'currentUsers'])
-            ->paginate(20, '*', '*', $request->page ?? 1);
-
-        return new RoomsCollection($rooms);
+        $rooms = Room::getList($request)->paginate(20, '*', '*', $request->page ?? 1);
     }
 
     public function getOne(Request $request)
@@ -57,7 +51,7 @@ class RoomsController extends Controller
 
     public function remove(Request $request)
     {
-        $success = (boolean)Room::destroy($request->id);
+        $success = (boolean) Room::destroy($request->id);
 
         return $this->success($success);
     }
