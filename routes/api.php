@@ -74,4 +74,11 @@ Route::group([
         Route::get('/delete/{id}', 'ServicesController@delete');
     });
 
+    Route::group([
+        'prefix' => 'workers',
+    ], function() {
+        Route::post('/assign-worker-on-guest', 'WorkersController@assignWorkerOnGuest');
+        Route::post('/get-workings-history', 'WorkersController@getWorkingsHistory');
+    });
+
 });

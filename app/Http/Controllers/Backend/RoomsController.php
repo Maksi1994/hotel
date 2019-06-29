@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Backend\Room\RoomsCollection;
 use App\Http\Resources\Backend\Rooms\RoomResource;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -39,7 +40,11 @@ class RoomsController extends Controller
 
     public function getList(Request $request)
     {
-        $rooms = Room::getList($request)->paginate(20, '*', '*', $request->page ?? 1);
+        $rooms = Room::withCount('guests')
+            ->getList($request)
+            ->paginate(20, '*', '*', $request->page ?? 1);
+
+        return new RoomsCollection($rooms);
     }
 
     public function getOne(Request $request)

@@ -57,6 +57,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Guest::class, 'user_guest', 'guest_id', 'user_id');
     }
 
+    public function workings() {
+       return $this->belongsToMany(Guest::class, 'guest_worker', 'guest_id', 'worker_id');
+    }
+
     public function hasAccess($type)
     {
         return $this->role()->where('name', $type)->exists();
@@ -119,6 +123,19 @@ class User extends Authenticatable
 
             $userModel->update($updatedData);
         }
+    }
+
+    public function scopeGetWorkersList($query, Request $request) {
+
+        $query->when($request->orderBy === 'count_workings', function ($q) use ($request) {
+            $q->orderBy('workings_count', $request->order ?? 'desc');
+        });
+
+        $query->when($request->orderBy !== 'new' , function ($q) use ($request) {
+            $q->orderBy('created_at', $request->order ?? 'desc');
+        });
+
+        return $query;
     }
 
 }

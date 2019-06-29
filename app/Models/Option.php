@@ -9,7 +9,7 @@ use App\Models\Guest;
 class Option extends Model
 {
   public $guarded = [];
-  public $timestamps = true;
+  public $timestamps = false;
 
   public function service() {
     return $this->belongsTo(Service::class);

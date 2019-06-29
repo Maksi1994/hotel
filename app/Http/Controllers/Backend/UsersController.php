@@ -33,23 +33,23 @@ class UsersController extends Controller
 
     public function saveRole(Request $request)
     {
-      if ($required->id) {
-        $validator = Validator::make($request->all(), [
-          'name' => 'required|unique:roles'
+        if ($request->id) {
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|unique:roles'
+            ]);
+
+            if (!$validator->fails()) {
+                return $this->success(false);
+            }
+        }
+
+        Role::updateOrCreate([
+            'id' => $request->id
+        ], [
+            'name' => $request->name
         ]);
 
-        if (!$validator->fails()) {
-         return $this->success(false);
-        }
-      }
-
-      Role::updateOrCreate([
-        'id'=> $request->id
-      ], [
-        'name' => $request->name
-      ]);
-
-      return $this->success(true);  
+        return $this->success(true);
     }
 
     public function deleteRole(Request $request)

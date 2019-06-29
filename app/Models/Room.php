@@ -50,7 +50,15 @@ class Room extends Model
 
     public function scopeGetList($query, Request $request)
     {
+        $query->when($request->orderType === 'new' , function ($q) use ($request) {
+            $q->created('created_at', $request->order ?? 'desc');
+        });
 
+        $query->when($request->orderType === 'price' , function ($q) use ($request) {
+            $q->created('created_at', $request->order ?? 'desc');
+        });
+
+        return $query;
     }
 
     public function currentGuest()

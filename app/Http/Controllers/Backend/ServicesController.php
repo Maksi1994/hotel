@@ -2,55 +2,78 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Resources\Backend\Services\ServicesCollection;
+use App\Http\Resources\Backend\Services\ServicesResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
-use App\Http\Resources\Backend\Services\ServiceResource;
-use App\Http\Resources\Backend\Services\ServiceCollection;
+use Illuminate\Support\Facades\Validator;
 
 class ServicesController extends Controller
 {
-    public function save(Request $request) {
-      $validation = null;
+    public function save(Request $request)
+    {
+        $validation = null;
 
-      if ($request->id) {
-        $validation = Validator::make($request->all(), [
-          'id' => 'required|exists:service',
-          'name' => 'required',
-          'options.*.name' => 'required'
+        if ($request->id) {
+            $validation = Validator::make($request->all(), [
+                'id' => 'required|exists:services',
+                'name' => 'required',
+                'options.*.name' => 'required'
+            ]);
+        } else {
+            $validation = Validator::make($request->all(), [
+                'name' => 'required|unique:services,name',
+                'options.*.name' => 'required'
+            ]);
+        }
+
+        if ($validation->fails()) {
+            return $this->success(false);
+        }
+
+        Service::saveOne($request);
+
+        return $this->success(true);
+    }
+
+    public function assingService(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:services,id',
+            'roles.*' => 'required|min:1|exists:roles,id'
         ]);
-      } else {
-        $validation = Validator::make($request->all(), [
-          'name' => 'required',
-          'options.*.name' => 'required'
-        ]);
-      }
+        $success = false;
 
-      if ($validation->fails()) {
-        return $this->success(false);
-      }
+        if (!$validator->fails()) {
+            Service::find($request->id)->roles()->async($request->roles);
+            $success = true;
+        }
 
-      Service::saveOne($request);
-
-      return $this->success(true);
+        return $this->success($success);
     }
 
-    public function getOne() {
-      $service = Service::with('options')->withCount('guests')->find($request->id);
+    public function getOne(Request $request)
+    {
+        $service = Service::with('options')
+            ->withCount('guests')
+            ->find($request->id);
 
-    
+        return new ServicesResource($service);
     }
 
-    public function getList(Request $request) {
-      $services = Service::with('options')
-      ->withCount('guests')
-      ->getList($request)
-      ->paginate(20, null, null, $request->page ?? 1);
+    public function getList(Request $request)
+    {
+        $services = Service::with('options')
+            ->withCount('guests')
+            ->getList($request)
+            ->paginate(20, null, null, $request->page ?? 1);
 
-      return new ServiceCollection($services);
+        return new ServicesCollection($services);
     }
 
-    public function delete(Request $request) {
+    public function delete(Request $request)
+    {
         Service::destroy($request->id);
 
         return $this->success(true);
