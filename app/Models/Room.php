@@ -19,6 +19,10 @@ class Room extends Model
         return $this->morphMany(Image::class, 'attachable');
     }
 
+    public function estimate() {
+       return $this->morphOne(Estimate::class, 'estimable');
+    }
+
     public static function saveOne(Request $request)
     {
         $roomNewImages = array_values($request->allFiles());

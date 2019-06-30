@@ -66,6 +66,10 @@ class User extends Authenticatable
         return $this->role()->where('name', $type)->exists();
     }
 
+    public function estimate() {
+       return $this->morphOne(Estimate::class, 'estimable');
+    }
+
     public static function saveOne(Request $request)
     {
         $avatar = '';

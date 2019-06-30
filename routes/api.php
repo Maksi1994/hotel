@@ -23,6 +23,15 @@ Route::group([
 });
 
 Route::group([
+  'prefix'=> 'estimates',
+  //'middleware'=> ['auth:api']
+], function() {
+    Route::post('/toggle-estimate', 'EstimatesController@toggleEstimate');
+    Route::post('/get-list', 'EstimatesController@getList');
+    Route::post('/get-guest-estimates', 'EstimatesController@getGuestsEstimates');
+});
+
+Route::group([
     'prefix' => 'backend',
     'namespace' => 'Backend',
     'middleware' => ['auth:api', 'access:admin']

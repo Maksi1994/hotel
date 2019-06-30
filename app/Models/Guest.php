@@ -31,6 +31,10 @@ class Guest extends Model
         return $this->belongsToMany(User::class , 'guest_worker', 'guest_id', 'worker_id');
     }
 
+    public function estimates() {
+        return $this->hasMany(Estimate::class, 'guest_id');
+    }
+
     public function scopeGetList($query, Request $request)
     {
         if ($request->view === 'regular') {
